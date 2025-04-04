@@ -20,10 +20,10 @@ services:
       # This allows external access to the Nginx web server running inside the container.
       # For example, if 'NGINX_PORT' is set to '8080', accessing 'http://localhost:8080' will reach the application.
       # -----------------------------------------------------------
-      - "${NGINX_PORT:-80}:80"
+      - "20319:80"
     depends_on:
       php-fpm:
-        condition: service_healthy  # Wait for php-fpm health check
+        condition: service_healthy # Wait for php-fpm health check
 
   php-fpm:
     # For the php-fpm service, we will create a custom image to install the necessary PHP extensions and setup proper permissions.
@@ -33,7 +33,7 @@ services:
       target: production
     restart: unless-stopped
     volumes:
-      - laravel-storage-production:/var/www/storage  # Mount the storage volume
+      - laravel-storage-production:/var/www/storage # Mount the storage volume
     env_file:
       - .env
     networks:
@@ -71,14 +71,14 @@ services:
     # This prevents dependent services from starting before the database is ready.
     # -----------------------------------------------------------
     healthcheck:
-      test: [ "CMD", "pg_isready" ]
+      test: ["CMD", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   redis:
     image: redis:alpine
-    restart: unless-stopped  # Automatically restart unless the service is explicitly stopped
+    restart: unless-stopped # Automatically restart unless the service is explicitly stopped
     networks:
       - laravel-production
     # Health check for Redis
